@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Doc Generator - Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .code-block {
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .step-number {
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 0;
+            color: #4b5563;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .active-nav {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .active-nav::after {
+            width: 100%;
+        }
+        
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                position: static;
+                max-height: none;
+            }
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 40;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-3px);
+        }
+        
+        .dark-mode .code-block {
+            background-color: #1f2937;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Back to top button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="w-12 h-12 rounded-lg bg-white bg-opacity-20 flex items-center justify-center mr-3">
+                        <i class="fas fa-code text-2xl"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold">API Doc Generator</h1>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="https://github.com/yourusername/api-doc-generator" class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg transition-all">
+                        <i class="fab fa-github mr-2"></i> GitHub
+                    </a>
+                    <a href="#installation" class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg transition-all">
+                        <i class="fas fa-download mr-2"></i> Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Sidebar Navigation -->
+            <div class="w-full md:w-1/4 lg:w-1/5 mb-6 md:mb-0">
+                <div class="sidebar bg-white p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4 text-gray-800">Documentation</h2>
+                    <ul class="space-y-2">
+                        <li><a href="#introduction" class="nav-link active-nav">Introduction</a></li>
+                        <li><a href="#installation" class="nav-link">Installation</a></li>
+                        <li><a href="#configuration" class="nav-link">Configuration</a></li>
+                        <li><a href="#usage" class="nav-link">Usage</a></li>
+                        <li><a href="#endpoint-definition" class="nav-link">Endpoint Definition</a></li>
+                        <li><a href="#testing" class="nav-link">Testing Interface</a></li>
+                        <li><a href="#customization" class="nav-link">Customization</a></li>
+                        <li><a href="#examples" class="nav-link">Examples</a></li>
+                        <li><a href="#faq" class="nav-link">FAQ</a></li>
+                    </ul>
+                    
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <h3 class="text-lg font-semibold mb-3">Other Resources</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="nav-link"><i class="fas fa-book mr-2"></i> API Reference</a></li>
+                            <li><a href="#" class="nav-link"><i class="fas fa-video mr-2"></i> Video Tutorials</a></li>
+                            <li><a href="#" class="nav-link"><i classfas fa-lightbulb mr-2"></i> Best Practices</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="w-full md:w-3/4 lg:w-4/5">
+                <!-- Introduction -->
+                <section id="introduction" class="mb-12 scroll-mt-16">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-2xl font-bold mb-4 gradient-text">Introduction</h2>
+                        <p class="mb-4 text-lg">API Doc Generator is a powerful Laravel package that automatically generates beautiful, interactive API documentation from your existing codebase. It provides a testing interface that allows developers to try out API endpoints directly from the documentation.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
+                            <div class="feature-card bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
+                                <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-2">Easy Setup</h3>
+                                <p class="text-gray-600">Get started in minutes with automatic endpoint discovery and documentation generation.</p>
+                            </div>
+                            
+                            <div class="feature-card bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
+                                <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                                    <i class="fas fa-flask"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-2">Interactive Testing</h3>
+                                <p class="text-gray-600">Test your endpoints directly from the documentation with a built-in API client.</p>
+                            </div>
+                            
+                            <div class="feature-card bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
+                                <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                                    <i class="fas fa-paint-brush"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-2">Customizable</h3>
+                                <p class="text-gray-600">Fully customizable templates and styles to match your brand identity.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Installation -->
+                <section id="installation" class="mb-12 scroll-mt-16">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-2xl font-bold mb-6 gradient-text">Installation</h2>
+                        
+                        <div class="flex items-start mb-6">
+                            <div class="step-number">1</div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Install via Composer</h3>
+                                <p class="mb-4">Install the package through Composer by running the following command in your terminal:</p>
+                                <div class="code-block">
+                                    <pre class="bg-gray-800 p-4 rounded-lg"><code class="language-bash">composer require yourusername/api-doc-generator</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start mb-6">
+                            <div class="step-number">2</div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Publish Assets</h3>
+                                <p class="mb-4">Publish the package assets to your application:</p>
+                                <div class="code-block">
+                                    <pre class="bg-gray-800 p-4 rounded-lg"><code class="language-bash">php artisan vendor:publish --tag=api-doc-generator-assets</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start mb-6">
+                            <div class="step-number">3</div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Publish Config</h3>
+                                <p class="mb-4">Publish the configuration file to customize the package:</p>
+                                <div class="code-block">
+                                    <pre class="bg-gray-800 p-4 rounded-lg"><code class="language-bash">php artisan vendor:publish --tag=api-doc-generator-config</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Configuration -->
+                <section id="configuration" class="mb-12 scroll-mt-16">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-2xl font-bold mb-6 gradient-text">Configuration</h2>
+                        
+                        <p class="mb-6">After installation, you can configure the package by modifying the <code class="bg-gray-100 px-2 py-1 rounded">config/api-doc-generator.php</code> file:</p>
+                        
+                        <div class="code-block mb-6">
+                            <pre class="bg-gray-800 p-4 rounded-lg"><code class="language-php">return [
+    /*
+    |--------------------------------------------------------------------------
+    | Route Prefix
+    |--------------------------------------------------------------------------
+    |
+    | This prefix will be added to all documentation routes.
+    |
+    */
+    'route_prefix' => 'api-docs',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Middleware
+    |--------------------------------------------------------------------------
+    |
+    | Middleware to apply to the documentation routes.
+    |
+    */
+    'middleware' => ['web'],
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Documentation Title
+    |--------------------------------------------------------------------------
+    |
+    | The title that will be displayed in the documentation.
+    |
+    */
+    'title' => 'API Documentation',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Documentation Description
+    |--------------------------------------------------------------------------
+    |
+    | A brief description of your API.
+    |
+    */
+    'description' => 'This is the API documentation for our application.',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Groups
+    |--------------------------------------------------------------------------
+    |
+    | Define your API endpoint groups here.
+    |
+    */
+    'groups' => [
+        'auth' => [
+            'name' => 'Authentication',
+            'description' => 'Endpoints for user authentication'
+        ],
+        'users' => [
+            'name' => 'Users',
+            'description' => 'Endpoints for managing users'
+        ],
+        // Add more groups as needed
+    ],
+];</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Usage -->
+                <section id="usage" class="mb-12 scroll-mt-16">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-2xl font-bold mb-6 gradient-text">Usage</h2>
+                        
+                        <div class="flex items-start mb-6">
+                            <div class="step-number">1</div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Define Your Endpoints</h3>
+                                <p class="mb-4">Add the <code class="bg-gray-100 px-2 py-1 rounded">@api</code> annotation to your controller methods:</p>
+                                <div class="code-block">
+                                    <pre class="bg-gray-800 p-4 rounded-lg"><code class="language-php">/**
+ * @api {get} /users Get all users
+ * @apiGroup Users
+ * @apiDescription Retrieve a list of all users
+ *
+ * @apiSuccess {Object[]} data List of users
+ * @apiSuccess {Number} data.id User ID
+ * @apiSuccess {String} data.name User name
+ * @apiSuccess {String} data.email User email
+ */
+public function index()
+{
+    // Your controller logic
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start mb-6">
+                            <div class="step-number">2</div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Generate Documentation</h3>
+                                <p class="mb-4">Run the command to generate documentation from your annotated code:</p>
+                                <div class="code-block">
+                                    <pre class="bg-gray-800 p-4 rounded-lg"><code class="language-bash">php artisan api-doc:generate</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="step-number">3</div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">View Documentation</h3>
+                                <p class="mb-4">Visit the documentation page in your browser:</p>
+                                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                    <p class="text-blue-800"><i class="fas fa-link mr-2"></i> Your documentation will be available at <code class="bg-blue-100 px-2 py-1 rounded">http://your-app.test/api-docs</code> (or whatever route prefix you configured).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Endpoint Definition -->
+                <section id="endpoint-definition" class="mb-12 scroll-mt-16">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-2xl font-bold mb-6 gradient-text">Endpoint Definition</h2>
+                        
+                        <p class="mb-6">You can define endpoints using annotations in your controller methods. Here's a comprehensive example:</p>
+                        
+                        <div class="code-block mb-6">
+                            <pre class="bg-gray-800 p-4 rounded-lg"><code class="language-php">/**
+ * @api {post} /users Create a new user
+ * @apiGroup Users
+ * @apiDescription Create a new user account
+ *
+ * @apiHeader {String} Authorization Bearer access token
+ * @apiHeader {String} Content-Type application/json
+ *
+ * @apiParam {String} name User's full name
+ * @apiParam {String} email User's email address
+ * @apiParam {String} password User's password
+ * @apiParam {String} [phone] User's phone number (optional)
+ *
+ * @apiSuccess {Object} data User object
+ * @apiSuccess {Number} data.id User ID
+ * @apiSuccess {String} data.name User name
+ * @apiSuccess {String} data.email User email
+ * @apiSuccess {String} data.created_at Registration date
+ *
+ * @apiError {Object} error Error object
+ * @apiError {String} error.message Error message
+ *
+ * @apiExample {json} Request Example:
+ *     {
+ *       "name": "John Doe",
+ *       "email": "john@example.com",
+ *       "password": "secret"
+ *     }
+ *
+ * @apiExample {json} Success Response:
+ *     {
+ *       "data": {
+ *         "id": 1,
+ *         "name": "John Doe",
+ *         "email": "john@example.com",
+ *         "created_at": "2023-05-15T10:00:00.000000Z"
+ *       }
+ *     }
+ *
+ * @apiExample {json} Error Response:
+ *     {
+ *       "error": {
+ *         "message": "The email has already been taken."
+ *       }
+ *     }
+ */
+public function store(Request $request)
+{
+    // Your controller logic
+}</code></pre>
+                        </div>
+                        
+                        <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mb-6">
+                            <h3 class="text-lg font-semibold text-yellow-800 mb-2"><i class="fas fa-lightbulb mr-2"></i> Pro Tip</h3>
+                            <p class="text-yellow-700">You can also define endpoints programmatically by creating a config file or adding them to your existing API Doc Generator configuration.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Testing Interface -->
+                <section id="testing" class="mb-12 scroll-mt-16">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-2xl font-bold mb-6 gradient-text">Testing Interface</h2>
+                        
+                        <p class="mb-6">The package includes a built-in testing interface that allows you to try out your API endpoints directly from the documentation.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i> Features
+                                </h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-arrow-right text-gray-500 mt-1 mr-2"></i>
+                                        <span>Send requests with different HTTP methods</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-arrow-right text-gray-500 mt-1 mr-2"></i>
+                                        <span>Add headers and query parameters</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-arrow-right text-gray-500 mt-1 mr-2"></i>
+                                        <span>Test with different body types (JSON, form data, etc.)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-arrow-right text-gray-500 mt-1 mr-2"></i>
+                                        <span>Authentication support (Bearer token, Basic Auth, API keys)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-arrow-right text-gray-500 mt-1 mr-2"></i>
+                                        <span>View response headers and status codes</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                                    <i class="fas fa-cogs text-blue-500 mr-2"></i> How to Use
+                                </h3>
+                                <ol class="list-decimal pl-5 space-y-2">
+                                    <li>Navigate to an endpoint in your documentation</li>
+                                    <li>Click on the "Request" tab in the testing interface</li>
+                                    <li>Configure your request parameters, headers, and body</li>
+                                    <li>Click the "Send" button to execute the request</li>
+                                    <li>View the response in the "Response" tab</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                            <h3 class="text-lg font-semibold text-blue-800 mb-2"><i class="fas fa-info-circle mr-2"></i> Note</h3>
+                            <p class="text-blue-700">The testing interface makes actual HTTP requests to your API, so ensure your API is running and accessible when testing.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Customization -->
+                <section id="customization" class="mb-12 scroll-mt-16">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-2xl font-bold mb-6 gradient-text">Customization</h2>
+                        
+                        <p class="mb-6">You can customize the appearance and behavior of your API documentation in several ways:</p>
+                        
+                        <div class="flex items-start mb-6">
+                            <div class="step-number">1</div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Custom Views</h3>
+                                <p class="mb-4">Publish the views to customize the documentation layout:</p>
+                                <div class="code-block">
+                                    <pre class="bg-gray-800 p-4 rounded-lg"><code class="language-bash">php artisan vendor:publish --tag=api-doc-generator-views</code></pre>
+                                </div>
+                                <p class="mt-4 text-gray-600">This will copy the package views to <code class="bg-gray-100 px-2 py-1 rounded">resources/views/vendor/api-doc-generator</code> where you can modify them.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start mb-6">
+                            <div class="step-number">2</div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Custom Styles</h3>
+                                <p class="mb-4">Add your own CSS to customize the appearance:</p>
+                                <div class="code-block">
+                                    <pre class="bg-gray-800 p-4 rounded-lg"><code class="language-html">// In your custom CSS file
+.api-doc-header {
+    background: linear-gradient(135deg, #your-color-1 0%, #your-color-2 100%);
+}
+
+.api-doc-endpoint {
+    border-color: #your-border-color;
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="step-number">3</div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Custom Groups</h3>
+                                <p class="mb-4">Define custom groups in the configuration file:</p>
+                                <div class="code-block">
+                                    <pre class="bg-gray-800 p-4 rounded-lg"><code class="language-php">// In config/api-doc-generator.php
+'groups' => [
+    'custom' => [
+        'name' => 'Custom Endpoints',
+        'description' => 'My custom API endpoints',
+        'color' => '#FF5733', // Optional custom color
+    ],
+],</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Examples -->
+                <section id="examples" class="mb-12 scroll-mt-16">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-2xl font-bold mb-6 gradient-text">Examples</h2>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">Basic Endpoint Example</h3>
+                            <div class="code-block">
+                                <pre class="bg-gray-800 p-4 rounded-lg"><code class="language-php">/**
+ * @api {get} /posts Get all posts
+ * @apiGroup Posts
+ * @apiDescription Retrieve a paginated list of blog posts
+ *
+ * @apiParam {Number} [page=1] Page number
+ * @apiParam {Number} [limit=10] Number of items per page
+ *
+ * @apiSuccess {Object[]} data List of posts
+ * @apiSuccess {Number} data.id Post ID
+ * @apiSuccess {String} data.title Post title
+ * @apiSuccess {String} data.content Post content
+ * @apiSuccess {String} data.author Post author
+ * @apiSuccess {String} data.created_at Post creation date
+ * @apiSuccess {Object} meta Pagination metadata
+ * @apiSuccess {Number} meta.current_page Current page number
+ * @apiSuccess {Number} meta.total Total number of items
+ * @apiSuccess {Number} meta.per_page Number of items per page
+ */
+public function index(Request $request)
+{
+    $limit = $request->get('limit', 10);
+    $posts = Post::paginate($limit);
+    
+    return response()->json([
+        'data' => $posts->items(),
+        'meta' => [
+            'current_page' => $posts->currentPage(),
+            'total' => $posts->total(),
+            'per_page' => $posts->perPage(),
+        ]
+    ]);
+}</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">Endpoint with Authentication</h3>
+                            <div class="code-block">
+                                <pre class="bg-gray-800 p-4 rounded-lg"><code class="language-php">/**
+ * @api {post} /posts Create a new post
+ * @apiGroup Posts
+ * @apiDescription Create a new blog post (requires authentication)
+ *
+ * @apiHeader {String} Authorization Bearer {token}
+ *
+ * @apiParam {String} title Post title
+ * @apiParam {String} content Post content
+ *
+ * @apiSuccess {Object} data Newly created post
+ * @apiSuccess {Number} data.id Post ID
+ * @apiSuccess {String} data.title Post title
+ * @apiSuccess {String} data.content Post content
+ * @apiSuccess {String} data.author Post author
+ * @apiSuccess {String} data.created_at Post creation date
+ *
+ * @apiError {Object} error Error object
+ * @apiError {String} error.message Error message
+ * @apiError {String} error.code Error code
+ */
+public function store(Request $request)
+{
+    $user = auth()->user();
+    
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'content' => 'required|string',
+    ]);
+    
+    $post = new Post();
+    $post->title = $validated['title'];
+    $post->content = $validated['content'];
+    $post->author = $user->name;
+    $post->save();
+    
+    return response()->json([
+        'data' => $post
+    ], 201);
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FAQ -->
+                <section id="faq" class="mb-12 scroll-mt-16">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-2xl font-bold mb-6 gradient-text">Frequently Asked Questions</h2>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">Q: How do I add authentication to my API documentation?</h3>
+                                <p class="text-gray-700">A: You can configure authentication in the package configuration file. The testing interface supports Bearer tokens, Basic Auth, and API keys.</p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">Q: Can I use this package with Lumen?</h3>
+                                <p class="text-gray-700">A: Yes, the package is compatible with both Laravel and Lumen frameworks.</p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">Q: How do I organize endpoints into groups?</h3>
+                                <p class="text-gray-700">A: You can use the <code class="bg-gray-100 px-2 py-1 rounded">@apiGroup</code> annotation in your endpoint definitions and configure the groups in the configuration file.</p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">Q: Can I customize the look and feel of the documentation?</h3>
+                                <p class="text-gray-700">A: Yes, you can publish the views and assets to customize the documentation to match your brand.</p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">Q: Does this package support OpenAPI/Swagger?</h3>
+                                <p class="text-gray-700">A: Currently, the package uses its own annotation format, but OpenAPI/Swagger support is planned for a future release.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">API Doc Generator</h2>
+                    </div>
+                    <p class="text-gray-400 mt-2">Beautiful, interactive API documentation for Laravel applications.</p>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-envelope text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 API Doc Generator. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize syntax highlighting
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // Back to top button functionality
+            const backToTopButton = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+            
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Update active navigation link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active-nav');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active-nav');
+                    }
+                });
+            });
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
